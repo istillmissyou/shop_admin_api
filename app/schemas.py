@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl, validator
+from pydantic import BaseModel, HttpUrl, validator, Field
 
 
 class ProductBase(BaseModel):
@@ -13,11 +13,13 @@ class ProductBase(BaseModel):
     * `category_id`: id категории
     * `image_url`: ссылка на изображение
     '''
-    name: str
-    price: int
-    count: int
-    category_id: int
-    image_url: HttpUrl | None = None
+    name: str = Field(example='Xiaomi 26 Turbo')
+    price: int = Field(example=999)
+    count: int = Field(example=55)
+    category_id: int = Field(example=2)
+    image_url: HttpUrl | None = Field(
+        default=None, example='https://img.com/example.png'
+    )
 
     @validator('price', 'count')
     def check_positive_number(cls, v):
