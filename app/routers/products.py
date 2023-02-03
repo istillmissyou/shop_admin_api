@@ -5,12 +5,12 @@ import sys
 from exceptions import exc_404
 from schemas import Product, ProductCreate
 from services import get_db
-import crud
+from crud import product_crud
 
 sys.path.append("..")
 
 router = APIRouter(
-    prefix='/api/products',
+    prefix='/api/v1/products',
     tags=['products'],
 )
 
@@ -20,7 +20,7 @@ router = APIRouter(
         response_model=list[Product],
 )
 async def get_products(db: Session = Depends(get_db)):
-    return await crud.get_products(db)
+    return await product_crud.get_products(db)
 
 
 @router.get(
@@ -31,7 +31,7 @@ async def get_product(
     product_id: int,
     db: Session = Depends(get_db),
 ):
-    product = await crud.get_product(db, product_id)
+    product = await product_crud.get_product(db, product_id)
     exc_404(product)
 
     return product
@@ -45,7 +45,7 @@ async def create_product(
     product: ProductCreate,
     db: Session = Depends(get_db),
 ):
-    return await crud.create_product(db, product)
+    return await product_crud.create_product(db, product)
 
 
 @router.put(
@@ -57,10 +57,10 @@ async def update_product(
     product_data: ProductCreate,
     db: Session = Depends(get_db),
 ):
-    product = await crud.get_product(db, product_id)
+    product = await product_crud.get_product(db, product_id)
     exc_404(product)
 
-    return await crud.update_product(db, product_data, product)
+    return await product_crud.update_product(db, product_data, product)
 
 
 @router.delete(
@@ -71,7 +71,7 @@ async def delete_product(
     product_id: int,
     db: Session = Depends(get_db),
 ):
-    product = await crud.get_product(db, product_id)
+    product = await product_crud.get_product(db, product_id)
     exc_404(product)
 
-    return await crud.delete_product(db, product)
+    return await product_crud.delete_product(db, product)
