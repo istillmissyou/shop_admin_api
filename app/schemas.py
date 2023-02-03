@@ -13,7 +13,7 @@ class ProductBase(BaseModel):
     * `category_id`: id категории
     * `image_url`: ссылка на изображение
     '''
-    name: str = Field(example='Xiaomi 26 Turbo')
+    name: str = Field(example='Xiaomi 25 Turbo')
     price: int = Field(example=999)
     count: int = Field(example=55)
     category_id: int = Field(example=2)
