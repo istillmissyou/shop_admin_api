@@ -1,4 +1,4 @@
-import crud
+from crud.product_crud import get_products
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -26,8 +26,7 @@ templates = Jinja2Templates(directory='templates')
 async def index(
     request: Request, db: Session = Depends(get_db)
 ):
-    products = await crud.get_products(db)
-    categories = await crud.get_categories(db)
+    products = await get_products(db)
     return templates.TemplateResponse(
         'index.html', {
             'request': request, 'products': products, 'categories': categories
