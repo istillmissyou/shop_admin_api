@@ -6,11 +6,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     expose:
-      - 5432
+      - ${POSTGRES_PORT?Variable not set}
     environment:
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=shop_database
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
 
   web:
     build: ../app/

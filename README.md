@@ -65,8 +65,17 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ```
 
+### Шаблон для .env файла
 
-### Как запустить :
+```
+POSTGRES_USER=имя пользователя
+POSTGRES_PASSWORD=пароль
+POSTGRES_DB=название базы
+POSTGRES_SERVER=название сервера
+POSTGRES_PORT=порт
+```
+
+### Как запустить:
 
 Склонировать проект и в терминале перейти в папку "infra"
 Далее в командной строке:
