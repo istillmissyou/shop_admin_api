@@ -7,6 +7,8 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     expose:
       - ${POSTGRES_PORT?Variable not set}
+    env_file:
+      - ./.env
     environment:
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}

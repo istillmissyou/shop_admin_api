@@ -13,7 +13,7 @@ add_tables()
 app = FastAPI(
     title='Store API',
     description='API for the admin panel for the online store',
-    version='0.1.1',
+    version='0.1.2',
     terms_of_service='https://github.com/istillmissyou/'
                      'shop_admin_api/blob/main/LICENSE',
     contact={
