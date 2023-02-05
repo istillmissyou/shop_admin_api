@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, BackgroundTasks
 from sqlalchemy.orm import Session
 import sys
 
 from exceptions import exc_404
 from schemas import Product, ProductCreate
-from services import get_db
+from services import get_db, write_notification
 from crud import product_crud
 
 sys.path.append("..")
@@ -42,10 +42,13 @@ async def get_product(
         response_model=Product,
 )
 async def create_product(
+    background_tasks: BackgroundTasks,
     product: ProductCreate,
     db: Session = Depends(get_db),
 ):
-    return await product_crud.create_product(db, product)
+    product = await product_crud.create_product(db, product)
+    background_tasks.add_task(write_notification, product.name)
+    return product
 
 
 @router.put(

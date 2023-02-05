@@ -26,3 +26,9 @@ def get_url():
     db = os.getenv('POSTGRES_DB', 'app')
     port = os.getenv('POSTGRES_PORT')
     return f'postgresql://{user}:{password}@{server}:{port}/{db}'
+
+
+def write_notification(name: str):
+    with open("log.txt", mode="w") as log_file:
+        content = f'Добавлен новый товар {name}'
+        log_file.write(content)
