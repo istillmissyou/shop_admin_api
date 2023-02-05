@@ -1,19 +1,19 @@
+import uvicorn
 from crud.product_crud import get_products
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from routers import categories, products
 from services import add_tables, get_db
 from sqlalchemy.orm import Session
-from routers import categories, products
-import uvicorn
 
 add_tables()
 
 app = FastAPI(
     title='Store API',
     description='API for the admin panel for the online store',
-    version='0.0.7',
+    version='0.0.8',
     terms_of_service='https://github.com/istillmissyou/'
                      'shop_admin_api/blob/main/LICENSE',
     contact={
@@ -30,8 +30,10 @@ app = FastAPI(
 app.include_router(categories.router)
 app.include_router(products.router)
 
+# Линк статики
 app.mount('/static', StaticFiles(directory='static'), name='static')
 
+# Шаблоны через Jinja2
 templates = Jinja2Templates(directory='templates')
 
 
@@ -39,6 +41,8 @@ templates = Jinja2Templates(directory='templates')
 async def index(
     request: Request, db: Session = Depends(get_db)
 ):
+    '''Главная страница с выводом по циклу товаров и завернутые в bootstrap'''
+
     products = await get_products(db)
     return templates.TemplateResponse(
         'index.html', {
@@ -48,4 +52,6 @@ async def index(
 
 
 if __name__ == '__main__':
+    '''Для дебаггинга'''
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

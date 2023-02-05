@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
 import os
 
 import database
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -20,6 +20,7 @@ def get_db():
 
 
 def get_url():
+    '''URL к БД'''
     user = os.getenv('POSTGRES_USER', 'postgres')
     password = os.getenv('POSTGRES_PASSWORD', '')
     server = os.getenv('POSTGRES_SERVER', 'db')
@@ -29,6 +30,7 @@ def get_url():
 
 
 def write_notification(name: str):
+    '''Фоновая задача с записью в файл о новом созданном товаре'''
     with open("log.txt", mode="w") as log_file:
         content = f'Добавлен новый товар {name}'
         log_file.write(content)
