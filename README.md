@@ -1,3 +1,4 @@
+![shop_admin_api Workflow](https://github.com/istillmissyou/shop_admin_api/actions/workflows/main.yml/badge.svg)
 # API shop admin
 
 ## Описание
