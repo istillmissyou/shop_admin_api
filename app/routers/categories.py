@@ -1,11 +1,11 @@
 import sys
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
 from crud import category_crud
 from exceptions import exc_404
-from fastapi import APIRouter, Depends
 from schemas import Category, CategoryCreate
 from services import get_db
-from sqlalchemy.orm import Session
 
 sys.path.append("..")
 

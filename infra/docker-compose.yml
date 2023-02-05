@@ -1,22 +1,22 @@
-version: '3.8'
+version: '3.9'
 services:
 
   db:
     image: postgres:15-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/shop_admin_db/
     expose:
-      - ${POSTGRES_PORT?Variable not set}
+      - ${POSTGRES_PORT}
     env_file:
       - ./.env
     environment:
-      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
-      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
 
   web:
     build: ../app/
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn main:app --host 0.0.0.0'
+    command: bash -c 'while !</dev/tcp/db/${POSTGRES_PORT}; do sleep 1; done; uvicorn main:app --host 0.0.0.0'
     restart: always
     volumes:
       - static_value:/app/static/
@@ -25,7 +25,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - 8001:8000
+      - 8000:8000
 
 
 volumes:

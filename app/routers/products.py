@@ -1,11 +1,11 @@
 import sys
+from fastapi import APIRouter, BackgroundTasks, Depends
+from sqlalchemy.orm import Session
 
 from crud import product_crud
 from exceptions import exc_404
-from fastapi import APIRouter, BackgroundTasks, Depends
 from schemas import Product, ProductCreate
 from services import get_db, write_notification
-from sqlalchemy.orm import Session
 
 sys.path.append("..")
 

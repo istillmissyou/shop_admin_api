@@ -1,19 +1,20 @@
 import uvicorn
-from crud.product_crud import get_products
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+
+from crud.product_crud import get_products
 from routers import categories, products
 from services import add_tables, get_db
-from sqlalchemy.orm import Session
 
 add_tables()
 
 app = FastAPI(
     title='Store API',
     description='API for the admin panel for the online store',
-    version='0.1.2',
+    version='0.1.3',
     terms_of_service='https://github.com/istillmissyou/'
                      'shop_admin_api/blob/main/LICENSE',
     contact={

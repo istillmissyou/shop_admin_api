@@ -68,11 +68,11 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 ### Шаблон для .env файла
 
 ```
-POSTGRES_USER=имя пользователя
-POSTGRES_PASSWORD=пароль
-POSTGRES_DB=название базы
-POSTGRES_SERVER=название сервера
-POSTGRES_PORT=порт
+POSTGRES_USER=myuser (имя пользователя)
+POSTGRES_PASSWORD=1234password (пароль)
+POSTGRES_DB=shop_admin_db (название базы)
+POSTGRES_SERVER=db (название хоста)
+POSTGRES_PORT=5432 (порт)
 ```
 
 ### Как запустить:
@@ -81,7 +81,7 @@ POSTGRES_PORT=порт
 Далее в командной строке:
 
 ``` 
-sudo docker compose up
+sudo docker compose up --build
 ```
 
 ## Автор
