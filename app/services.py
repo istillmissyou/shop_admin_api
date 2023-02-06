@@ -1,9 +1,5 @@
-from dotenv import load_dotenv
-import os
-
 import database
-
-load_dotenv()
+from config import settings
 
 
 def add_tables():
@@ -21,11 +17,11 @@ def get_db():
 
 def get_url():
     '''URL к БД'''
-    user = os.getenv('POSTGRES_USER', 'postgres')
-    password = os.getenv('POSTGRES_PASSWORD', '')
-    server = os.getenv('POSTGRES_SERVER', 'db')
-    db = os.getenv('POSTGRES_DB', 'app')
-    port = os.getenv('POSTGRES_PORT')
+    user = settings.postgres_user
+    password = settings.postgres_password
+    server = settings.postgres_server
+    db = settings.postgres_db
+    port = settings.postgres_port
     return f'postgresql://{user}:{password}@{server}:{port}/{db}'
 
 
