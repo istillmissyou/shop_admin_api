@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <br><br>
+    <form method="post" class="row g-3 justify-content-center">
+      <div class="col-md-3">
+        <input type="text" name="name" class="form-control" placeholder="Наименование" aria-label="Наименование">
+        <br>
+        <button type="submit" class="btn btn-primary">Создать</button>
+      </div>
+    </form>
+    <br><br>
+    <div class="row g-3 justify-content-center">
+    <div class="alert alert-success col-md-6" role="alert">
+        <h4 class="alert-heading">Добавили!</h4>
+        <p>{{ obj }} "{{ name }}" добавлена в базу данных</p>
+    </div>
+    </div>
+</div>
+{% endblock %}

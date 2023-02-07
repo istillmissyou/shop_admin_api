@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import Depends, FastAPI, Request
+from fastapi import Depends, FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,8 +7,10 @@ from sqlalchemy.orm import Session
 
 from config import settings
 from crud.product_crud import get_products
+from crud.category_crud import get_categories
 from routers import categories, products
 from services import add_tables, get_db
+from models import Category, Product
 
 add_tables()
 
@@ -43,6 +45,67 @@ async def index(
             'request': request, 'products': products, 'categories': categories
         }
     )
+
+
+@app.get('/create_product', response_class=HTMLResponse)
+async def create_product_get(
+    request: Request, db: Session = Depends(get_db)
+):
+    '''Форма создания продукта'''
+
+    categories = await get_categories(db)
+
+    return templates.TemplateResponse('create_product.html', {
+        'request': request, 'categories': categories,
+    })
+
+
+@app.post('/create_product', response_class=HTMLResponse)
+async def create_product_post(
+    request: Request, db: Session = Depends(get_db),
+    name: str = Form(...), price: int = Form(...), count: int = Form(...),
+    category_id: int = Form(...), image_url: str = Form(...),
+):
+    '''Форма создания продукта'''
+
+    product = Product(name=name, price=price, count=count,
+                      category_id=category_id, image_url=image_url)
+    db.add(product)
+    db.commit()
+    db.refresh(product)
+
+    return templates.TemplateResponse('create_product_done.html', {
+        'request': request, 'obj': 'Товар', 'name': name,
+    })
+
+
+@app.get('/create_category', response_class=HTMLResponse)
+async def create_category_get(
+    request: Request, db: Session = Depends(get_db)
+):
+    '''Форма создания категории'''
+
+    categories = await get_categories(db)
+
+    return templates.TemplateResponse('create_category.html', {
+        'request': request, 'categories': categories,
+    })
+
+
+@app.post('/create_category', response_class=HTMLResponse)
+async def create_category_post(
+    request: Request, db: Session = Depends(get_db), name: str = Form(...),
+):
+    '''Форма создания категории'''
+
+    category = Category(name=name)
+    db.add(category)
+    db.commit()
+    db.refresh(category)
+
+    return templates.TemplateResponse('create_category_done.html', {
+        'request': request, 'obj': 'Категория', 'name': name,
+    })
 
 
 if __name__ == '__main__':

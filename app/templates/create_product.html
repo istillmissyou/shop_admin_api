@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <br><br>
+    <form method="post" class="row g-3">
+      <div class="col-md-6">
+        <input type="text" name="name" class="form-control" placeholder="Наименование" aria-label="Наименование">
+      </div>
+
+      <div class="col-md-6">
+        <div class="input-group">
+            <input type="text" name="count" class="form-control" placeholder="Количество" aria-label="Количество">
+            <span class="input-group-text">шт.</span>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="text" name="price" class="form-control" placeholder="Стоимость" aria-label="Стоимость">
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <select class="form-select" name="category_id" aria-label="Default select example">
+            <option selected>Выберите категорию</option>
+            {% for category in categories -%}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+            {%- endfor %}
+          </select>
+      </div>
+
+      <div class="col-md-12">
+        <div class="input-group">
+          <span class="input-group-text" id="basic-addon3">https://img.com/example/</span>
+          <input type="text" name="image_url" class="form-control" id="basic-url" aria-describedby="basic-addon3"
+          placeholder="Изображение" aria-label="Изображение">
+        </div>
+        <div class="form-text">Вставьте ссылку на изображение</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Создать
+      </button>
+
+    </form>
+</div>
+{% endblock %}
