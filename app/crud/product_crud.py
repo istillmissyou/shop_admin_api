@@ -18,9 +18,10 @@ async def get_products(db: 'Session') -> List[schemas.Product]:
 
 async def get_product(db: 'Session', product_id: int):
     '''Получение определенного товара по id'''
-    return db.query(models.Product).filter(
+    product = db.query(models.Product).filter(
         models.Product.id == product_id
     ).first()
+    return schemas.Product.from_orm(product)
 
 
 async def create_product(

@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from config import settings
-from crud.product_crud import get_products
+from crud.product_crud import get_product, get_products
 from crud.category_crud import get_categories
 from exceptions import is_url_image
 from routers import categories, products
@@ -40,12 +40,24 @@ async def index(
 ):
     '''Главная страница с выводом по циклу товаров и завернутые в bootstrap'''
 
-    products = await get_products(db)
-    return templates.TemplateResponse(
-        'index.html', {
-            'request': request, 'products': products, 'categories': categories
-        }
-    )
+    return templates.TemplateResponse('index.html', {
+        'request': request,
+        'products': await get_products(db),
+    })
+
+
+@app.get('/product/{product_id}', response_class=HTMLResponse)
+async def product_detail(
+    product_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    '''Товар в деталях'''
+
+    return templates.TemplateResponse('product_detail.html', {
+        'request': request,
+        'product': await get_product(db, product_id),
+    })
 
 
 @app.get('/create_product', response_class=HTMLResponse)
@@ -54,10 +66,9 @@ async def create_product_get(
 ):
     '''Форма создания продукта'''
 
-    categories = await get_categories(db)
-
     return templates.TemplateResponse('create_product.html', {
-        'request': request, 'categories': categories,
+        'request': request,
+        'categories': await get_categories(db),
     })
 
 
@@ -94,10 +105,9 @@ async def create_category_get(
 ):
     '''Форма создания категории'''
 
-    categories = await get_categories(db)
-
     return templates.TemplateResponse('create_category.html', {
-        'request': request, 'categories': categories,
+        'request': request,
+        'categories': await get_categories(db),
     })
 
 
@@ -113,7 +123,7 @@ async def create_category_post(
     db.refresh(category)
 
     return templates.TemplateResponse('create_category_done.html', {
-        'request': request, 'obj': 'Категория', 'name': name,
+        'request': request, 'name': name,
     })
 
 
