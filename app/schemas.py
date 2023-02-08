@@ -30,6 +30,13 @@ class ProductBase(BaseModel):
             raise ValueError('Цена и количество не могут быть отрицательными')
         return v
 
+    @validator('image_url')
+    def without_image(cls, v):
+        '''Если нет изображения ставит заглушку'''
+        if v is None:
+            return 'https://p2payer.com/images/profile_nophoto.jpg'
+        return v
+
 
 class Product(ProductBase):
     id: int

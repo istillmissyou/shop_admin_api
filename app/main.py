@@ -64,7 +64,7 @@ async def create_product_get(
 async def create_product_post(
     request: Request, db: Session = Depends(get_db),
     name: str = Form(...), price: int = Form(...), count: int = Form(...),
-    category_id: int = Form(...), image_url: str = Form(...),
+    category_id: int = Form(...), image_url: str = Form(None),
 ):
     '''Форма создания продукта'''
 
