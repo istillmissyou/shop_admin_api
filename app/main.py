@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from config import settings
 from crud.product_crud import get_products
 from crud.category_crud import get_categories
+from exceptions import is_url_image
 from routers import categories, products
 from services import add_tables, get_db
 from models import Category, Product
@@ -68,6 +69,14 @@ async def create_product_post(
 ):
     '''Форма создания продукта'''
 
+    categories = await get_categories(db)
+
+    # Эксепт на валидность изображения в ссылке
+    if is_url_image(image_url):
+        return templates.TemplateResponse('product_no_image.html', {
+            'request': request, 'name': name, 'categories': categories,
+        })
+
     product = Product(name=name, price=price, count=count,
                       category_id=category_id, image_url=image_url)
     db.add(product)
@@ -75,7 +84,7 @@ async def create_product_post(
     db.refresh(product)
 
     return templates.TemplateResponse('create_product_done.html', {
-        'request': request, 'obj': 'Товар', 'name': name,
+        'request': request, 'name': name, 'categories': categories,
     })
 
 

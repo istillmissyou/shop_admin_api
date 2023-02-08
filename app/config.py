@@ -4,7 +4,7 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     app_title: str = 'Store API'
     app_description: str = 'API for the admin panel for the online store'
-    app_version: str = '0.1.8'
+    app_version: str = '0.1.9'
     terms_of_service: str = ('https://github.com/istillmissyou/'
                              'shop_admin_api/blob/main/LICENSE')
     contact: dict = {
