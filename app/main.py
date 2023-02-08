@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from config import settings
-from crud.product_crud import get_product, get_products
+from crud.product_crud import get_product, get_products, delete_product
 from crud.category_crud import get_categories
 from exceptions import is_url_image
 from routers import categories, products
@@ -88,6 +88,10 @@ async def create_product_post(
             'request': request, 'name': name, 'categories': categories,
         })
 
+    # Заглушка
+    if image_url is None:
+        image_url = 'https://p2payer.com/images/profile_nophoto.jpg'
+
     product = Product(name=name, price=price, count=count,
                       category_id=category_id, image_url=image_url)
     db.add(product)
@@ -96,6 +100,22 @@ async def create_product_post(
 
     return templates.TemplateResponse('create_product_done.html', {
         'request': request, 'name': name, 'categories': categories,
+    })
+
+
+@app.get('/product/delete/{product_id}', response_class=HTMLResponse)
+async def delete_product_get(
+    product_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    '''Удаление товара'''
+
+    product = await get_product(db, product_id)
+    await delete_product(db, product)
+
+    return templates.TemplateResponse('delete_done.html', {
+        'request': request,
     })
 
 

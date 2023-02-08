@@ -1,5 +1,4 @@
 from pydantic import BaseModel, Field, HttpUrl, validator
-from requests import head
 
 
 class ProductBase(BaseModel):
