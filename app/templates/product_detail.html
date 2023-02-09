@@ -12,7 +12,8 @@
           <h5 class="card-title">{{ product.name }}</h5>
           <p class="card-text"><b>Цена:</b> ${{ product.price }}</p>
           <p class="card-text"><small class="text-muted"><b>Количество:</b> {{ product.count }} шт.</small></p>
-          <a href="delete/{{ product.id }}" class="btn btn-danger">Удалить</a>
+          <a href="change/{{ product.id }}" class="btn btn-outline-warning">Редактировать</a>
+          <a href="delete/{{ product.id }}" class="btn btn-outline-danger">Удалить</a>
         </div>
       </div>
     </div>

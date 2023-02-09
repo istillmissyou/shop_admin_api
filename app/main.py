@@ -1,17 +1,18 @@
+import schemas
 import uvicorn
+from config import settings
+from crud.category_crud import get_categories
+from crud.product_crud import (delete_product, get_product, get_products,
+                               update_product)
+from exceptions import is_url_image
 from fastapi import Depends, FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
-
-from config import settings
-from crud.product_crud import get_product, get_products, delete_product
-from crud.category_crud import get_categories
-from exceptions import is_url_image
+from models import Category, Product
 from routers import categories, products
 from services import add_tables, get_db
-from models import Category, Product
+from sqlalchemy.orm import Session
 
 add_tables()
 
@@ -106,6 +107,60 @@ async def create_product_post(
 
     return templates.TemplateResponse('create_product_done.html', {
         'request': request, 'name': name, 'categories': categories,
+    })
+
+
+@app.get('/product/change/{product_id}', response_class=HTMLResponse)
+async def change_product_get(
+    product_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    '''Изменение товара'''
+
+    product = await get_product(db, product_id)
+
+    return templates.TemplateResponse('change_product.html', {
+        'request': request,
+        'product': product,
+        'category_name': product.category.name,
+        'category_id': product.category.id,
+        'categories': await get_categories(db),
+    })
+
+
+@app.post('/product/change/{product_id}', response_class=HTMLResponse)
+async def change_product_post(
+    product_id: int, request: Request, db: Session = Depends(get_db),
+    name: str = Form(...), price: int = Form(...), count: int = Form(...),
+    category_id: int = Form(...), image_url: str = Form(None),
+):
+    '''Изменение товара'''
+
+    # Эксепт на валидность изображения в ссылке
+    if is_url_image(image_url):
+        return templates.TemplateResponse('product_no_image.html', {
+            'request': request, 'name': name,
+            'categories': await get_categories(db),
+        })
+
+    # Заглушка
+    if image_url is None:
+        image_url = 'https://p2payer.com/images/profile_nophoto.jpg'
+
+    product = await get_product(db, product_id)
+    product_data = schemas.ProductCreate(
+        name=name, price=price, count=count, category_id=category_id,
+        image_url=image_url,
+    )
+    await update_product(db, product_data, product)
+
+    return templates.TemplateResponse('change_product_done.html', {
+        'request': request,
+        'product': product,
+        'category_name': product.category.name,
+        'category_id': product.category.id,
+        'categories': await get_categories(db),
     })
 
 
