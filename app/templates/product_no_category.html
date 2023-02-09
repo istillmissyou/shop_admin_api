@@ -23,7 +23,7 @@
 
       <div class="col-md-6">
         <select class="form-select" name="category_id" aria-label="Default select example">
-            <option selected>Выберите категорию</option>
+            <option value="0" selected>Выберите категорию</option>
             {% for category in categories -%}
             <option value="{{ category.id }}">{{ category.name }}</option>
             {%- endfor %}
@@ -50,7 +50,7 @@
         <h4 class="alert-heading">Ошибка!</h4>
         <p>Товар "{{ name }}" не добавлен в базу данных</p>
         <hr>
-        <p class="mb-0">Ссылка не ведёт на изображение</p>      
+        <p class="mb-0">Пожалуйста, укажите категорию</p>      
     </div>
     </div>
 </div>

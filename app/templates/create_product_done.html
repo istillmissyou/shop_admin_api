@@ -23,7 +23,7 @@
 
       <div class="col-md-6">
         <select class="form-select" name="category_id" aria-label="Default select example">
-            <option selected>Выберите категорию</option>
+            <option value="0" selected>Выберите категорию</option>
             {% for category in categories -%}
             <option value="{{ category.id }}">{{ category.name }}</option>
             {%- endfor %}

@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:15-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/shop_admin_db/
+      - postgres_data:/var/lib/postgresql/shop_admin/
     expose:
       - ${POSTGRES_PORT}
     env_file:

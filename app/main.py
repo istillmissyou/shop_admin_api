@@ -82,6 +82,12 @@ async def create_product_post(
 
     categories = await get_categories(db)
 
+    # Проверка на обязательность категории
+    if category_id == 0:
+        return templates.TemplateResponse('product_no_category.html', {
+            'request': request, 'name': name, 'categories': categories,
+        })
+
     # Эксепт на валидность изображения в ссылке
     if is_url_image(image_url):
         return templates.TemplateResponse('product_no_image.html', {
