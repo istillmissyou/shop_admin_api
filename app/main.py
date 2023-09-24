@@ -55,7 +55,7 @@ async def product_detail(
 ):
     '''Товар в деталях'''
 
-    return templates.TemplateResponse('product_detail.html', {
+    return templates.TemplateResponse('products/product_detail.html', {
         'request': request,
         'product': await get_product(db, product_id),
     })
@@ -67,7 +67,7 @@ async def create_product_get(
 ):
     '''Форма создания продукта'''
 
-    return templates.TemplateResponse('create_product.html', {
+    return templates.TemplateResponse('products/create_product.html', {
         'request': request,
         'categories': await get_categories(db),
     })
@@ -85,13 +85,14 @@ async def create_product_post(
 
     # Проверка на обязательность категории
     if category_id == 0:
-        return templates.TemplateResponse('product_no_category.html', {
-            'request': request, 'name': name, 'categories': categories,
-        })
+        return templates.TemplateResponse(
+            'products/product_no_category.html',
+            {'request': request, 'name': name, 'categories': categories}
+        )
 
     # Эксепт на валидность изображения в ссылке
     if is_url_image(image_url):
-        return templates.TemplateResponse('product_no_image.html', {
+        return templates.TemplateResponse('products/product_no_image.html', {
             'request': request, 'name': name, 'categories': categories,
         })
 
@@ -105,7 +106,7 @@ async def create_product_post(
     db.commit()
     db.refresh(product)
 
-    return templates.TemplateResponse('create_product_done.html', {
+    return templates.TemplateResponse('products/create_product_done.html', {
         'request': request, 'name': name, 'categories': categories,
     })
 
@@ -120,7 +121,7 @@ async def change_product_get(
 
     product = await get_product(db, product_id)
 
-    return templates.TemplateResponse('change_product.html', {
+    return templates.TemplateResponse('products/change_product.html', {
         'request': request,
         'product': product,
         'category_name': product.category.name,
@@ -139,7 +140,7 @@ async def change_product_post(
 
     # Эксепт на валидность изображения в ссылке
     if is_url_image(image_url):
-        return templates.TemplateResponse('product_no_image.html', {
+        return templates.TemplateResponse('products/product_no_image.html', {
             'request': request, 'name': name,
             'categories': await get_categories(db),
         })
@@ -155,7 +156,7 @@ async def change_product_post(
     )
     await update_product(db, product_data, product)
 
-    return templates.TemplateResponse('change_product_done.html', {
+    return templates.TemplateResponse('products/change_product_done.html', {
         'request': request,
         'product': product,
         'category_name': product.category.name,
@@ -186,7 +187,7 @@ async def create_category_get(
 ):
     '''Форма создания категории'''
 
-    return templates.TemplateResponse('create_category.html', {
+    return templates.TemplateResponse('categories/create_category.html', {
         'request': request,
         'categories': await get_categories(db),
     })
@@ -203,7 +204,7 @@ async def create_category_post(
     db.commit()
     db.refresh(category)
 
-    return templates.TemplateResponse('create_category_done.html', {
+    return templates.TemplateResponse('categories/create_category_done.html', {
         'request': request, 'name': name,
     })
 
